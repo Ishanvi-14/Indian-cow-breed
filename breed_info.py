@@ -13,7 +13,7 @@ def get_breed_info_from_gemini(breed_name, language_code='en'):
     genai.configure(api_key=api_key)
     model = genai.GenerativeModel('gemini-2.0-flash')
 
-    # Updated prompts with clear sections for UI integration
+
     prompts = {
         "Overview": f"Give a short overview of the {breed_name} breed including its origin and appearance. Be concise and helpful for rural farmers.",
         "Region & Adaptability": f"Describe the regions where {breed_name} cattle are common and the climates they adapt well to.",
