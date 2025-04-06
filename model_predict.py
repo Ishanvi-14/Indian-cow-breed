@@ -4,10 +4,10 @@ from tensorflow.keras.models import load_model
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
 
 
-model = load_model(r"C:\Users\Ishanvi Mitragotri\Google soln\Google Solutions\bovine_breed_classifier_final.keras")
+model = load_model(r"bovine_breed_classifier_final.keras")
 
 
-dataset_path = r"D:\Python_FY\Indian_bovine_breeds"
+dataset_path = r"indian_bovine_breeds"
 datagen = ImageDataGenerator(rescale=1.0/255)
 train_generator = datagen.flow_from_directory(
     dataset_path,
