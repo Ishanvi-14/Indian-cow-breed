@@ -1,0 +1,189 @@
+/* styles.css */
+body {
+    font-family: 'Segoe UI', sans-serif;
+    background: linear-gradient(135deg, #e0ffe6, #b3f0c9);
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    color: #2d4739;
+  }
+  
+  .container {
+    width: 90%;
+    max-width: 850px;
+    background-color: #ffffff;
+    padding: 30px;
+    border-radius: 16px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+    overflow: hidden;
+    position: relative;
+  }
+  
+  header {
+    text-align: center;
+    margin-bottom: 30px;
+  }
+  
+  h1 {
+    font-size: 2.7rem;
+    color: #1a8e46;
+  }
+  
+  p {
+    font-size: 1.1rem;
+    color: #3d3d3d;
+  }
+  
+  .language-section,
+  .upload-section {
+    text-align: center;
+    margin: 20px 0;
+  }
+  
+  select {
+    font-size: 1rem;
+    padding: 10px 16px;
+    margin-top: 10px;
+    border-radius: 8px;
+    border: 1px solid #bbb;
+    background-color: #f9f9f9;
+    transition: border-color 0.3s;
+  }
+  
+  select:hover {
+    border-color: #1a8e46;
+  }
+  
+  .file-label {
+    display: inline-block;
+    padding: 15px 35px;
+    background-color: #ffa502;
+    color: white;
+    font-weight: bold;
+    font-size: 1rem;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .file-label input {
+    display: none;
+  }
+  
+  .file-label:hover {
+    background-color: #e69500;
+  }
+  
+  #submit-btn {
+    margin-top: 20px;
+    padding: 14px 35px;
+    background-color: #1a8e46;
+    color: white;
+    font-size: 1.1rem;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  #submit-btn:hover {
+    background-color: #146c36;
+  }
+  
+  .image-preview {
+    margin-top: 20px;
+    text-align: center;
+    display: none;
+    border: 3px dashed #1a8e46;
+    padding: 10px;
+    border-radius: 10px;
+  }
+  
+  #image-preview img {
+    width: 100%;
+    max-width: 220px;
+    border-radius: 8px;
+    margin-top: 10px;
+  }
+  
+  .result-section {
+    text-align: center;
+    padding: 20px;
+    border-top: 2px dashed #1a8e46;
+    margin-top: 30px;
+  }
+  
+  .result-section h2 {
+    color: #1a8e46;
+    font-size: 2rem;
+    margin-bottom: 20px;
+  }
+  
+  .image-container img {
+    max-width: 420px;
+    border-radius: 10px;
+    margin-top: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+  
+  .breed-info {
+    margin-top: 20px;
+    text-align: left;
+  }
+  
+  .info-box {
+    background-color: #f4fff7;
+    padding: 18px;
+    margin: 12px 0;
+    border-radius: 8px;
+    border-left: 5px solid #ffa502;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.07);
+    transition: transform 0.3s ease;
+  }
+  
+  .info-box h4 {
+    font-size: 1.2rem;
+    color: #ffa502;
+  }
+  
+  .info-box p {
+    font-size: 1rem;
+    color: #333;
+  }
+  
+  .info-box:hover {
+    transform: translateY(-3px);
+  }
+  
+  button {
+    padding: 12px 32px;
+    background-color: #ffa502;
+    color: white;
+    font-size: 1.1rem;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-top: 25px;
+  }
+  
+  button:hover {
+    background-color: #e69500;
+  }
+  #map-loader {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 400px;
+    margin-top: 40px;
+    font-weight: bold;
+    color: #4CAF50;
+    font-size: 18px;
+  }
+  
+  #map {
+    display: none;
+  }
