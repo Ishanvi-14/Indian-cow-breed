@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Bovine Breed Classifier</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Bovine Breed Classifier</h1>
+      <p>Upload a cow image to predict its breed!</p>
+    </header>
+
+<!-- 🌐 Language Selector -->
+<section class="language-section">
+    <form action="/" method="POST" enctype="multipart/form-data" id="upload-form">
+      <label for="language-select">Choose Language:</label>
+      <select id="language-select" name="language">
+        <option value="en" {% if language_code == 'en' %}selected{% endif %}>English</option>
+        <option value="hi" {% if language_code == 'hi' %}selected{% endif %}>Hindi</option>
+        <option value="mr" {% if language_code == 'mr' %}selected{% endif %}>Marathi</option>
+        <option value="ta" {% if language_code == 'ta' %}selected{% endif %}>Tamil</option>
+        <option value="te" {% if language_code == 'te' %}selected{% endif %}>Telugu</option>
+        <option value="gu" {% if language_code == 'gu' %}selected{% endif %}>Gujarati</option>
+        <option value="kn" {% if language_code == 'kn' %}selected{% endif %}>Kannada</option>
+        <option value="ml" {% if language_code == 'ml' %}selected{% endif %}>Malayalam</option>
+        <option value="pa" {% if language_code == 'pa' %}selected{% endif %}>Punjabi</option>
+        <option value="or" {% if language_code == 'or' %}selected{% endif %}>Odia</option>
+        <option value="bn" {% if language_code == 'bn' %}selected{% endif %}>Bengali</option>
+        <option value="as" {% if language_code == 'as' %}selected{% endif %}>Assamese</option>
+        <option value="ur" {% if language_code == 'ur' %}selected{% endif %}>Urdu</option>
+        <option value="ne" {% if language_code == 'ne' %}selected{% endif %}>Nepali</option>
+      </select>
+  
+
+    <!-- 📤 Image Upload Section -->
+    <section class="upload-section">
+      <label for="image" class="file-label">
+        <span>Choose an Image</span>
+        <input type="file" name="image" id="image" accept="image/*" required />
+      </label>
+      <div id="image-preview" class="image-preview">
+        <img src="" alt="Uploaded Image Preview" />
+      </div>
+      <button type="submit" id="submit-btn" class="btn">Classify Breed</button>
+    </section>
+    </form>
+
+    {% if breed %}
+    <section class="result-section">
+      <h2>Predicted Breed: {{ breed }}</h2>
+    
+      {% if image_filename %}
+      <div class="image-container">
+        <img src="{{ url_for('static', filename='uploads/' + image_filename) }}" alt="Uploaded Image" />
+      </div>
+      {% endif %}
+    
+      <div class="breed-info">
+        {% for title, info in breed_info.items() %}
+        <div class="info-box">
+          <h4>{{ title }}</h4>
+          <p>{{ info }}</p>
+        </div>
+        {% endfor %}
+      </div>
+    
+      <button onclick="window.location.reload();">Classify Another Image</button>
+    
+      <!-- Vet Map Section -->
+      <div class="vet-section">
+        <h3>Find a Local Vet</h3>
+        <p>Nearby veterinary clinics will appear below.</p>
+        <div id="map-loader">Fetching nearby veterinary doctors...</div>
+        <div id="map" style="width: 100%; height: 400px; margin-top: 20px; border-radius: 12px;"></div>
+      </div>
+    </section>
+    {% endif %}
+    
+
+    <!-- 🩺 Separate Vet Finder Section -->
+    <section class="vet-section" style="margin-top: 3em;">
+      <h2>Find a Local Cow Doctor 🐄🩺</h2>
+      <div id="map-loader">Fetching nearby veterinary doctors...</div>
+      <div id="map" style="width: 100%; height: 400px; margin-top: 20px; border-radius: 12px; display: none;"></div>
+      <ul id="vet-list" style="margin-top: 1em; list-style: none; padding: 0;"></ul>
+    </section>
+  </div>
+
+  <!-- 📍 Google Maps Script -->
+  <script async
+    src="https://maps.googleapis.com/maps/api/js?key={{ map_api_key }}&libraries=places&callback=initMap">
+  </script>
+
+  <!-- 🔍 Vet Map Logic -->
+  <script>
+    function initMap() {
+      if (!navigator.geolocation) {
+        alert("Geolocation is not supported by your browser.");
+        return;
+      }
+
+      navigator.geolocation.getCurrentPosition(position => {
+        const userLocation = {
+          lat: position.coords.latitude,
+          lng: position.coords.longitude,
+        };
+
+        const map = new google.maps.Map(document.getElementById("map"), {
+          center: userLocation,
+          zoom: 12,
+        });
+
+        new google.maps.Marker({
+          position: userLocation,
+          map: map,
+          title: "You are here",
+          icon: "http://maps.google.com/mapfiles/ms/icons/blue-dot.png",
+        });
+
+        const service = new google.maps.places.PlacesService(map);
+        service.nearbySearch({
+          location: userLocation,
+          radius: 10000,
+          keyword: "veterinary doctor"
+        }, (results, status) => {
+          if (status === google.maps.places.PlacesServiceStatus.OK) {
+            const vetList = document.getElementById("vet-list");
+            vetList.innerHTML = ""; // Clear previous
+
+            results.forEach(place => {
+              const marker = new google.maps.Marker({
+                map: map,
+                position: place.geometry.location,
+                title: place.name
+              });
+
+              const infoWindow = new google.maps.InfoWindow({
+                content: `<strong>${place.name}</strong><br>${place.vicinity || ''}`
+              });
+
+              marker.addListener("click", () => {
+                infoWindow.open(map, marker);
+              });
+
+              // 📞 Add vet to list
+              const li = document.createElement("li");
+              li.innerHTML = `<strong>${place.name}</strong><br>${place.vicinity || ''}`;
+              if (place.formatted_phone_number) {
+                li.innerHTML += `<br>📞 ${place.formatted_phone_number}`;
+              }
+              li.style.marginBottom = "12px";
+              vetList.appendChild(li);
+            });
+
+            document.getElementById("map-loader").style.display = "none";
+            document.getElementById("map").style.display = "block";
+          } else {
+            document.getElementById("map-loader").innerText = "Could not fetch nearby veterinary doctors.";
+          }
+        });
+      }, () => {
+        alert("Unable to retrieve your location.");
+      });
+    }
+  </script>
+
+  <!-- 📦 Main JS -->
+  <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>
